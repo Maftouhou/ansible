@@ -2,21 +2,6 @@
   - hosts: ans-db-group
     become: true
     tasks:
-    ###################################
-    # Install Mysql 
-    # ---------------------------------
-    - name: Inastall mysql-server
-      yum: name={{item}} state=latest
-      with_items:
-        - mariadb
-        - mariadb-server
-        - MySQL-python
-        - rsync
-
-    - name: Start Mysql server
-      systemd: 
-        state: started
-        name: mariadb
     
     ##################################
     # Manage Mysql users
@@ -29,28 +14,30 @@
 
     - name: Create Mysql user
       mysql_user: 
+        host: '{{item}}'
         name: ansible
         password: ansible
-        priv: '*.*:ALL'
+        priv: '*.*:ALL,GRANT'
         state: present
+      with_items:
+        - localhost
+        - '%'
 
   #######################################
   # Move database from app-svr to db-svr
   # -------------------------------------
-  
   - hosts: ans-app-group
     become: true
     tasks:
-    - name: get database from app-svr app repo
+    - name: get database from app-svr project folder
       fetch: 
-        src: /var/www/html/elycee/db_elycee.sql
-        dest: /tmp/ansible/db_elycee.sql 
+        src: /var/www/html/Blog_PHP/db_blogphp.sql
+        dest: /tmp/ansible/db_blogphp.sql 
 
   - hosts: ans-db-group
     become: true
     tasks:
-
-    - name: Create destination folder for db
+    - name: Create destination folder for database
       file: 
         path: '/tmp/{{item}}'
         state: directory
@@ -61,8 +48,8 @@
 
     - name: send database to db-svr 
       copy: 
-        src: /tmp/ansible/db_elycee.sql
-        dest: /tmp/ansible/db_elycee.sql
+        src: /tmp/ansible/db_blogphp.sql
+        dest: /tmp/ansible/db_blogphp.sql
 
 
   ######################################
@@ -73,19 +60,23 @@
     tasks:
 
     - name: Prepare database to import
-      shell: find -type f -name db_elycee.sql | xargs cp -u -t /tmp/db_ansible/
+      shell: find -type f -name db_blogphp.sql | xargs cp -u -t /tmp/db_ansible/
       args:
         chdir: /tmp/ansible/
 
     - name: Create database
       mysql_db: 
-        name: db_elycee
+        name: db_blogphp
         state: present
 
     - name: Import Mysql database
       mysql_db:
         state: import
-        name: db_elycee
-        target: /tmp/db_ansible/db_elycee.sql
-
+        name: db_blogphp
+        target: /tmp/db_ansible/db_blogphp.sql
+        
+    - name: Start Mysql server
+      systemd: 
+        state: started
+        name: mariadb
 

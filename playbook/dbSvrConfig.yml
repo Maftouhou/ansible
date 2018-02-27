@@ -1,0 +1,20 @@
+---
+  - hosts: ans-db-group
+    become: true
+    tasks:
+    ###################################
+    # Install Mysql 
+    # ---------------------------------
+    - name: Inastall mysql-server
+      yum: name={{item}} state=latest
+      with_items:
+        - mariadb
+        - mariadb-server
+        - MySQL-python
+        - rsync
+
+    - name: Start Mysql server
+      systemd: 
+        state: started
+        name: mariadb
+        

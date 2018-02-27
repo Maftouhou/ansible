@@ -1,0 +1,85 @@
+---
+  - hosts: ans-app-group
+    become: true
+    tasks:
+
+    #- name: Get kwicktchat
+    #  git:
+    #    repo: https://github.com/Maftouhou/kwicktchat.git
+    #   dest: /var/www/html/kwicktchat/
+    # notify: restart httpd
+
+    - name: Get Blog_PHP
+      git:
+        repo: https://github.com/Maftouhou/Blog_php.git
+        dest: /var/www/html/Blog_PHP/
+      #notify: remove_composer_lock
+
+    - name: set privilege on app folder
+      file:
+        path: '{{item}}'
+        owner: apache
+        group: apache
+        recurse: yes
+      with_items: 
+        - /var/www/html/Blog_PHP/bootstrap
+        - /var/www/html/Blog_PHP/storage
+
+    - name: Creating App env file
+      shell: cp /var/www/html/Blog_PHP/.env.example /var/www/html/Blog_PHP/.env
+
+    - name: Setup .env informations
+      lineinfile:
+        path: /var/www/html/Blog_PHP/.env
+        regexp: '{{item.regexp}}'
+        line: '{{item.line}}'
+      with_items:
+        - { regexp: '^DB_CONNECTION=', line: 'DB_CONNECTION=mysql' }
+        - { regexp: '^DB_HOST=', line: 'DB_HOST=192.168.33.50' }
+        - { regexp: '^DB_PORT=', line: 'DB_PORT=3306' }
+        - { regexp: '^DB_DATABASE=', line: 'DB_DATABASE=db_blogphp' }
+        - { regexp: '^DB_USERNAME=', line: 'DB_USERNAME=ansible' }
+        - { regexp: '^DB_PASSWORD=', line: 'DB_PASSWORD=ansible' }
+        - { regexp: '^MAIL_DRIVER=', line: 'MAIL_DRIVER=smtp' }
+        - { regexp: '^MAIL_HOST=', line: 'MAIL_HOST=smtp.gmail.com' }
+        - { regexp: '^MAIL_PORT=', line: 'MAIL_PORT=465' }
+        - { regexp: '^MAIL_USERNAME=', line: 'MAIL_USERNAME=mafthib@gmail.com' }
+        - { regexp: '^MAIL_PASSWORD=', line: 'MAIL_PASSWORD=Projet@2016' }
+        - { regexp: '^MAIL_ENCRYPTION=', line: 'MAIL_ENCRYPTION=ssl' }
+
+    #- name: remove composer.lock on projet
+    #  file: 
+    #    path: /var/www/html/Blog_PHP/composer.lock
+    #    state: absent
+
+    #- name: Cleaning composer cache
+    #  shell: /usr/local/bin/composer clearcache
+
+    - name: Installing Composer Dependancies
+      composer:
+        command: install
+        working_dir: /var/www/html/Blog_PHP/
+
+    - name: restart httpd alone
+      systemd:
+        name: httpd
+        state: restarted
+        enabled: yes
+
+    - name: Generate Application key
+      shell: php artisan key:generate
+      args:
+        chdir: /var/www/html/Blog_PHP/
+
+    handlers: 
+    - name: restart httpd
+      systemd: 
+        name: httpd
+        state: restarted
+        enabled: yes
+        
+    #- name: remove_composer_lock
+    #  file:
+    #    path: /var/www/html/Blog_PHP/composer.lock
+    #    state: absent 
+        
