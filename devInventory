@@ -1,0 +1,13 @@
+[ans-app-group]
+ansible-app-svr
+
+[ans-db-group]
+ansible-db-svr
+
+[ans-load-group]
+ansible-loadbalancer
+
+[ans-ctl-group]
+ansible-control ansible_connection=local
+
+

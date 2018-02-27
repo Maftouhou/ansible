@@ -1,0 +1,43 @@
+---
+  - hosts: ans-load-group
+    become: true
+    tasks: 
+    - name: Install Epel-release Repo
+      yum: 
+        name: epel-release
+        state: present
+        update_cache: yes
+
+    - name: Install NGINX
+      yum: 
+        name: nginx 
+        state: present 
+        update_cache: yes
+
+    - name: Configure nginx site
+      template: 
+        src: /home/ansadm/ansible-config/templete/nginx.conf.j2
+        dest: /etc/nginx/sites-available/elycee.conf
+        mode: 0644
+      notify: symlink_nginx_conf
+
+    - name: Starting Nginx
+      systemd:
+        state: started
+        name: nginx
+        enabled: yes
+
+    - name: Starting Nginx
+      systemd:
+        state: restarted
+        name: nginx
+        enabled: yes
+
+    handlers:
+    - name: symlink_nginx_conf
+      file:
+        src: /etc/nginx/sites-available/elycee.conf 
+        dest: /etc/nginx/sites-enabled/elycee
+        state: link
+
+

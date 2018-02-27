@@ -1,0 +1,23 @@
+---
+  - hosts: ans-app-group
+    become: true
+    tasks:
+    
+    - name: Setup db informations
+      lineinfile:
+        path: /var/www/html/elycee/.env
+        regexp: '{{item.regexp}}'
+        line: '{{item.line}}'
+      with_items:
+        - { regexp: '^DB_CONNECTION=', line: 'DB_CONNECTION=mysql' }
+        - { regexp: '^DB_HOST=', line: 'DB_HOST=192.168.33.50' }
+        - { regexp: '^DB_PORT=', line: 'DB_PORT=3306' }
+        - { regexp: '^DB_DATABASE=', line: 'DB_DATABASE=db_elycee' }
+        - { regexp: '^DB_USERNAME=', line: 'DB_USERNAME=ansible' }
+        - { regexp: '^DB_PASSWORD=', line: 'DB_PASSWORD=ansible' }
+
+    - name: transfert file from app-svr to db-svr
+      synchronize:
+        src: /path/on/server_a
+        dest: /path/on/server_b
+      delegate_to: ans-db-group 
