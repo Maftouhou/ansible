@@ -1,0 +1,15 @@
+---
+  - hosts: ans-app-group
+    become: true
+    tasks:
+    - name: Httpd.conf access right
+      lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: '{{item.regexp}}'
+        line: '{{item.line}}'
+      with_items:
+        - { regexp: '^\s+\s+(AllowOverride)\s+(none|None)\s*$', line: '    AllowOverride all' }
+        - { regexp: '^\s+\s+(AllowOverride)\s+(none|None)\s*$', line: '    AllowOverride all' }
+        - { regexp: '^\s+\s+(AllowOverride)\s+(none|None)\s*$', line: '    AllowOverride all' }
+        - { regexp: '^\s+\s+(AllowOverride)\s+(none|None)\s*$', line: '    AllowOverride all' }
+
