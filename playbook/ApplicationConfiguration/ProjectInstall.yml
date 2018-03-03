@@ -29,7 +29,7 @@
       shell: cp /var/www/html/Blog_PHP/.env.example /var/www/html/Blog_PHP/.env
 
     ## Setup environnement configuration for the application
-    - include: Inc.EnvironnementConfiguration.yml
+    - import_tasks: Inc.EnvironnementConfiguration.yml
 
     #- name: remove composer.lock on projet
     #  file: 

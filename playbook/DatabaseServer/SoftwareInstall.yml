@@ -1,5 +1,5 @@
 ---
   - hosts: ans-db-group
     become: true
-    roles:
+    roles: 
       - mysql

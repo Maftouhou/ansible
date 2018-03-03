@@ -8,7 +8,7 @@
     - { regexp: '^DB_CONNECTION=', line: 'DB_CONNECTION=mysql' }
     - { regexp: '^DB_HOST=', line: 'DB_HOST=192.168.33.50' }
     - { regexp: '^DB_PORT=', line: 'DB_PORT=3306' }
-    - { regexp: '^DB_DATABASE=', line: 'DB_DATABASE=db_elycee' }
+    - { regexp: '^DB_DATABASE=', line: 'DB_DATABASE=db_blogphp' }
     - { regexp: '^DB_USERNAME=', line: 'DB_USERNAME=ansible' }
     - { regexp: '^DB_PASSWORD=', line: 'DB_PASSWORD=ansible' }
     - { regexp: '^MAIL_DRIVER=', line: 'MAIL_DRIVER=smtp' }

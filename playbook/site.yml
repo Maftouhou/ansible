@@ -1,7 +1,7 @@
 ---
 ## Calling all playbooks
 # ---------------------------------------
-- include: WebServer/SoftwareInstall.yml
-- include: DatabaseServer/SoftwareInstall.yml
-- include: ApplicationConfiguration/ProjectInstall.yml
-- include: databaseConfiguration/databaseConfiguration.yml
+- import_playbook: WebServer/SoftwareInstall.yml
+- import_playbook: DatabaseServer/SoftwareInstall.yml
+- import_playbook: ApplicationConfiguration/ProjectInstall.yml
+- import_playbook: databaseConfiguration/databaseConfiguration.yml
