@@ -1,0 +1,35 @@
+---
+  - hosts: ans-app-group
+    become: true
+    tasks: 
+      - name: check Apach service
+        command: systemctl status httpd
+
+      # this task is following a service task
+      - name: check witch port service is listening
+        wait_for: port=80 timeout=1
+
+  - hosts: ans-db-group
+    become: true
+    tasks: 
+      - name: check Mysql service
+        command: systemctl status mariadb
+
+      # this task is following a service task
+      - name: check witch port service is listening
+        wait_for: port=3306 timeout=1
+
+  - hosts: ans-ctl-group
+    #become: true
+    tasks: 
+      - name: verify end-to-end response
+        uri: 
+          #url: 'http://{{item}}' 
+          url: http://192.168.33.60/
+          return_content: yes
+        #with_items: groups.ans-app-group
+        register: webpage
+
+      #- fail: msg="Index fail to return content"
+        #when: "'Hello' not in item.content"
+        #with_items: "{{app_index.results}}"
