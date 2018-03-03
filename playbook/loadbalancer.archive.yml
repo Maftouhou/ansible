@@ -16,7 +16,7 @@
 
     - name: Configure nginx site
       template: 
-        src: /home/ansadm/ansible-config/templete/nginx.conf.j2
+        src: /home/ansible/ansible-config/templete/nginx.conf.j2
         dest: /etc/nginx/sites-available/elycee.conf
         mode: 0644
       notify: symlink_nginx_conf

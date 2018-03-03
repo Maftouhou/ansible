@@ -1,0 +1,6 @@
+---
+  - hosts: ans-app-group
+    become: true
+    roles:
+      - httpd
+

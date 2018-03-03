@@ -1,0 +1,19 @@
+---
+- name: Setup db informations
+  lineinfile:
+    path: /var/www/html/Blog_PHP/.env
+    regexp: '{{item.regexp}}'
+    line: '{{item.line}}'
+  with_items:
+    - { regexp: '^DB_CONNECTION=', line: 'DB_CONNECTION=mysql' }
+    - { regexp: '^DB_HOST=', line: 'DB_HOST=192.168.33.50' }
+    - { regexp: '^DB_PORT=', line: 'DB_PORT=3306' }
+    - { regexp: '^DB_DATABASE=', line: 'DB_DATABASE=db_elycee' }
+    - { regexp: '^DB_USERNAME=', line: 'DB_USERNAME=ansible' }
+    - { regexp: '^DB_PASSWORD=', line: 'DB_PASSWORD=ansible' }
+    - { regexp: '^MAIL_DRIVER=', line: 'MAIL_DRIVER=smtp' }
+    - { regexp: '^MAIL_HOST=', line: 'MAIL_HOST=smtp.gmail.com' }
+    - { regexp: '^MAIL_PORT=', line: 'MAIL_PORT=465' }
+    - { regexp: '^MAIL_USERNAME=', line: 'MAIL_USERNAME=mafthib@gmail.com' }
+    - { regexp: '^MAIL_PASSWORD=', line: 'MAIL_PASSWORD=Projet@2016' }
+    - { regexp: '^MAIL_ENCRYPTION=', line: 'MAIL_ENCRYPTION=ssl' }
