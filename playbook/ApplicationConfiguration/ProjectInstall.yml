@@ -28,7 +28,8 @@
     - name: Creating App env file
       shell: cp /var/www/html/Blog_PHP/.env.example /var/www/html/Blog_PHP/.env
 
-    - include: EnvirnementConfiguration.yml
+    ## Setup environnement configuration for the application
+    - include: Inc.EnvironnementConfiguration.yml
 
     #- name: remove composer.lock on projet
     #  file: 

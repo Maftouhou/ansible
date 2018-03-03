@@ -1,0 +1,17 @@
+---
+- name: Httpd.conf access right
+  lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '{{item.regexp}}'
+    line: '{{item.line}}'
+  with_items:
+    - { regexp: '^\s+\s+(AllowOverride)\s+(none|None)\s*$', line: '    AllowOverride all' }
+    - { regexp: '^\s+\s+(AllowOverride)\s+(none|None)\s*$', line: '    AllowOverride all' }
+    - { regexp: '^\s+\s+(AllowOverride)\s+(none|None)\s*$', line: '    AllowOverride all' }
+    - { regexp: '^\s+\s+(AllowOverride)\s+(none|None)\s*$', line: '    AllowOverride all' }
+
+- name: restart httpd
+  systemd:
+    name: httpd
+    state: restarted
+    enabled: yes

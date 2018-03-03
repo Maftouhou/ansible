@@ -1,0 +1,33 @@
+---
+# tasks file for composer
+## ----------------------------------------- 
+# Install Composer process
+# ------------------------------------------
+- name: Download Composer 
+  get_url: 
+    url: https://getcomposer.org/installer
+    dest: /usr/local/bin/composer-setup.php
+
+- name: Install Composer 
+  shell: php composer-setup.php
+  args:
+    chdir: /usr/local/bin/
+
+- name: rename_composer
+  shell: mv composer.phar composer
+  args:
+    chdir: /usr/local/bin/
+
+- name: restart httpd alone
+  systemd:
+    name: httpd
+    state: restarted
+    enabled: yes
+
+## ----------------------------------------- 
+# Install Composer process
+# ------------------------------------------
+#- name: Install Bower
+#  npm:
+#    name: bower
+#    global: yes

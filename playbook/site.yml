@@ -1,2 +1,5 @@
 ---
-- include: 
+- include: WebServer/SoftwareInstall.yml
+- include: DatabaseServer/SoftwareInstall.yml
+- include: ApplicationConfiguration/ProjectInstall.yml
+- include: databaseConfiguration/databaseConfiguration.yml
